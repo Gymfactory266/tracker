@@ -45,10 +45,20 @@
     margin-bottom: 14px;
   }
   .logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; color: var(--red); }
-  .semana-badge {
-    font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted);
-    background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 20px; border: 0.5px solid var(--border);
+
+  /* Semana switcher */
+  .semana-switcher {
+    display: flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.05); border: 0.5px solid var(--border);
+    border-radius: 20px; padding: 3px 4px;
   }
+  .semana-btn {
+    font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--muted); background: transparent; border: none;
+    padding: 4px 10px; border-radius: 16px; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-weight: 500; transition: all 0.2s;
+  }
+  .semana-btn.active { background: var(--red); color: white; }
 
   .days-scroll { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
   .days-scroll::-webkit-scrollbar { display: none; }
@@ -127,7 +137,6 @@
   .nota-input:focus { outline: none; border-color: rgba(225,8,19,0.4); }
   .nota-input::placeholder { color: rgba(255,255,255,0.2); }
 
-  /* MODAL EDITAR NOMBRE */
   .modal-overlay {
     display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85);
     z-index: 999; align-items: center; justify-content: center; padding: 20px;
@@ -185,7 +194,10 @@
 <div class="header">
   <div class="header-top">
     <div class="logo">GYM FACTORY</div>
-    <div class="semana-badge">Semana 1</div>
+    <div class="semana-switcher">
+      <button class="semana-btn active" id="btnS1" onclick="switchSemana(1)">S1</button>
+      <button class="semana-btn" id="btnS2" onclick="switchSemana(2)">S2</button>
+    </div>
   </div>
   <div class="days-scroll" id="dayTabs"></div>
 </div>
@@ -211,10 +223,14 @@
 <div class="toast" id="toast">✓ Guardado</div>
 
 <script>
-const DAYS = [
+// ─── SEMANA 1 ───────────────────────────────────────────────────────────────
+const DAYS_S1 = [
   {
-    id: 'empuje', name: 'Empuje', sub: 'Pecho · Hombro · Tríceps',
+    id: 's1-empuje', name: 'Empuje', sub: 'Pecho · Hombro · Tríceps',
     sections: [
+      { label: 'Calentamiento', exercises: [
+        { name: 'Movilidad articular y funcional', rp: "5'", rpe: 'x', series: 1, pausa: 'x', rir: '-' },
+      ]},
       { label: 'Trabajo inicial', exercises: [
         { name: 'Press de banco grip cerrado', rp: 8, rpe: 8, series: 3, pausa: '2.5', rir: 3 },
         { name: 'Press con mancuernas inclinado', rp: 10, rpe: 8, series: 3, pausa: '2.5', rir: 2 },
@@ -229,8 +245,11 @@ const DAYS = [
     ]
   },
   {
-    id: 'traccion', name: 'Tracción', sub: 'Espalda · Bíceps',
+    id: 's1-traccion', name: 'Tracción', sub: 'Espalda · Bíceps',
     sections: [
+      { label: 'Calentamiento', exercises: [
+        { name: 'Movilidad articular y funcional', rp: "5'", rpe: 'x', series: 1, pausa: 'x', rir: '-' },
+      ]},
       { label: 'Trabajo inicial', exercises: [
         { name: 'Jalón alto cerrado', rp: 10, rpe: 8, series: 2, pausa: '2.5', rir: 2 },
         { name: 'Dominada de potencia y bajada controlada', rp: 8, rpe: 8, series: 3, pausa: '2.5', rir: 2 },
@@ -245,8 +264,11 @@ const DAYS = [
     ]
   },
   {
-    id: 'piernas', name: 'Piernas', sub: 'Cuádriceps · Isquios · Glúteos',
+    id: 's1-piernas', name: 'Piernas', sub: 'Cuádriceps · Isquios · Glúteos',
     sections: [
+      { label: 'Calentamiento', exercises: [
+        { name: 'Movilidad articular y funcional', rp: "5'", rpe: 'x', series: 1, pausa: 'x', rir: '-' },
+      ]},
       { label: 'Trabajo inicial', exercises: [
         { name: 'Extensión de cuádriceps lentas', rp: 10, rpe: 8, series: 3, pausa: '2.5', rir: 1 },
         { name: 'Sentadilla en Smith', rp: 8, rpe: 8, series: 2, pausa: '2.5', rir: 3 },
@@ -261,8 +283,11 @@ const DAYS = [
     ]
   },
   {
-    id: 'brazos', name: 'Brazos', sub: 'Hipertrofia Bíceps · Tríceps · Hombros',
+    id: 's1-brazos', name: 'Brazos', sub: 'Hipertrofia Bíceps · Tríceps · Hombros',
     sections: [
+      { label: 'Calentamiento', exercises: [
+        { name: 'Movilidad articular y funcional', rp: "5'", rpe: 'x', series: 1, pausa: 'x', rir: '-' },
+      ]},
       { label: 'Trabajo inicial', exercises: [
         { name: 'Laterales en polea', rp: 15, rpe: 8, series: 3, pausa: '2.5', rir: 1 },
         { name: 'Patada de posterior', rp: 12, rpe: 8, series: 3, pausa: '2.5', rir: 1 },
@@ -277,8 +302,11 @@ const DAYS = [
     ]
   },
   {
-    id: 'acc-piernas', name: 'Acc. Piernas', sub: 'Accesorios · Gemelos · Glúteos',
+    id: 's1-acc-piernas', name: 'Acc. Piernas', sub: 'Accesorios · Gemelos · Glúteos',
     sections: [
+      { label: 'Calentamiento', exercises: [
+        { name: 'Movilidad articular y funcional', rp: "5'", rpe: 'x', series: 1, pausa: 'x', rir: '-' },
+      ]},
       { label: 'Trabajo inicial', exercises: [
         { name: 'Gemelos en máquina', rp: 15, rpe: 8, series: 2, pausa: '2.5', rir: '-' },
         { name: 'Sentadilla sumo en máquina', rp: 10, rpe: 6, series: 3, pausa: '2.5', rir: 2 },
@@ -292,8 +320,11 @@ const DAYS = [
     ]
   },
   {
-    id: 'core', name: 'Core', sub: 'Lumbar · Abdomen · Hombros',
+    id: 's1-core', name: 'Core', sub: 'Lumbar · Abdomen · Hombros',
     sections: [
+      { label: 'Calentamiento', exercises: [
+        { name: 'Movilidad articular y funcional', rp: "5'", rpe: 'x', series: 1, pausa: 'x', rir: '-' },
+      ]},
       { label: 'Trabajo inicial', exercises: [
         { name: 'Hiperextensiones lumbares', rp: 15, rpe: 6, series: 3, pausa: '-', rir: '-' },
         { name: 'Press militar parado con barra', rp: 10, rpe: 7, series: 3, pausa: '-', rir: '-' },
@@ -308,11 +339,142 @@ const DAYS = [
   }
 ];
 
+// ─── SEMANA 2 ───────────────────────────────────────────────────────────────
+const DAYS_S2 = [
+  {
+    id: 's2-pecho-biceps', name: 'Pecho / Bíceps', sub: 'Pecho · Bíceps',
+    sections: [
+      { label: 'Calentamiento', exercises: [
+        { name: 'Movilidad articular y funcional', rp: "5'", rpe: 'x', series: 1, pausa: 'x', rir: '-' },
+      ]},
+      { label: 'Trabajo inicial', exercises: [
+        { name: 'Press en smith inclinado', rp: 8, rpe: 7, series: 3, pausa: '2.5', rir: 3 },
+        { name: 'Press frontal máquina', rp: 10, rpe: 6, series: 3, pausa: '2.5', rir: 3 },
+        { name: 'Aperturas altas de pecho', rp: 10, rpe: 6, series: 3, pausa: '2.5', rir: 3 },
+        { name: 'Aperturas baja en polea', rp: 10, rpe: 6, series: 3, pausa: '2.5', rir: 3 },
+        { name: 'Curl martillo', rp: 12, rpe: 6, series: 3, pausa: '2.5', rir: 3 },
+        { name: 'Curl inclinado', rp: 10, rpe: 7, series: 3, pausa: '2.5', rir: 3 },
+        { name: 'Curl banco scott máquina', rp: 10, rpe: 7, series: 3, pausa: '2.5', rir: 3 },
+      ]},
+      { label: 'Vuelta a la calma', exercises: [
+        { name: 'Ejercicio cardiovascular', rp: 20, rpe: 4, series: 1, pausa: '-', rir: '-' },
+      ]}
+    ]
+  },
+  {
+    id: 's2-cuad-gluteo', name: 'Cuád / Glúteo', sub: 'Cuádriceps · Glúteo',
+    sections: [
+      { label: 'Calentamiento', exercises: [
+        { name: 'Movilidad articular y funcional', rp: "5'", rpe: 'x', series: 1, pausa: 'x', rir: '-' },
+      ]},
+      { label: 'Trabajo inicial', exercises: [
+        { name: 'Extensiones de cuádriceps', rp: 10, rpe: 7, series: 2, pausa: '2.5', rir: 3 },
+        { name: 'Sentadilla en hacksquat', rp: 10, rpe: 7, series: 3, pausa: '2.5', rir: 3 },
+        { name: 'Estocada estática', rp: 10, rpe: 7, series: 3, pausa: '2.5', rir: 3 },
+        { name: 'Hip trust', rp: 10, rpe: 7, series: 3, pausa: '2.5', rir: 2 },
+        { name: 'Hiperextensión lumbar', rp: 8, rpe: 7, series: 4, pausa: '2.5', rir: 3 },
+        { name: 'Gemelos parado', rp: 12, rpe: 7, series: 4, pausa: '2.5', rir: '-' },
+      ]},
+      { label: 'Vuelta a la calma', exercises: [
+        { name: 'Ejercicio cardiovascular', rp: 20, rpe: 4, series: 1, pausa: '-', rir: '-' },
+      ]}
+    ]
+  },
+  {
+    id: 's2-espalda-triceps', name: 'Espalda / Tríceps', sub: 'Espalda · Tríceps',
+    sections: [
+      { label: 'Calentamiento', exercises: [
+        { name: 'Movilidad articular y funcional', rp: "5'", rpe: 'x', series: 1, pausa: 'x', rir: '-' },
+      ]},
+      { label: 'Trabajo inicial', exercises: [
+        { name: 'Jalón alto supino', rp: 8, rpe: 7, series: 3, pausa: '2.5', rir: 3 },
+        { name: 'Jalón unilateral máquina', rp: 8, rpe: 7, series: 2, pausa: '2.5', rir: 3 },
+        { name: 'Remo en T', rp: 10, rpe: 7, series: 3, pausa: '2.5', rir: 3 },
+        { name: 'Remo libre con barra', rp: 8, rpe: 7, series: 3, pausa: '2.5', rir: 3 },
+        { name: 'Extensión de tríceps drop set', rp: 12, rpe: 7, series: 4, pausa: '2.5', rir: 3 },
+        { name: 'Extensión tras nuca', rp: 10, rpe: 7, series: 4, pausa: '2.5', rir: 3 },
+      ]},
+      { label: 'Vuelta a la calma', exercises: [
+        { name: 'Ejercicio cardiovascular', rp: 20, rpe: 4, series: 1, pausa: '-', rir: '-' },
+      ]}
+    ]
+  },
+  {
+    id: 's2-isquios-gluteo', name: 'Isquios / Glúteo', sub: 'Isquiotibiales · Glúteo',
+    sections: [
+      { label: 'Calentamiento', exercises: [
+        { name: 'Movilidad articular y funcional', rp: "5'", rpe: 'x', series: 1, pausa: 'x', rir: '-' },
+      ]},
+      { label: 'Trabajo inicial', exercises: [
+        { name: 'Peso muerto rumano', rp: 8, rpe: 7, series: 3, pausa: '2.5', rir: 3 },
+        { name: 'Curl femoral acostado', rp: 12, rpe: 7, series: 3, pausa: '2.5', rir: 3 },
+        { name: 'Curl femoral sentado', rp: 12, rpe: 8, series: 3, pausa: '2.5', rir: 3 },
+        { name: 'Hip trust', rp: 10, rpe: 8, series: 3, pausa: '2.5', rir: 2 },
+        { name: 'Abductor', rp: 15, rpe: 7, series: 3, pausa: '2.5', rir: 3 },
+        { name: 'Buenos días', rp: 10, rpe: 7, series: 3, pausa: '2.5', rir: 3 },
+      ]},
+      { label: 'Vuelta a la calma', exercises: [
+        { name: 'Ejercicio cardiovascular', rp: 20, rpe: 4, series: 1, pausa: '-', rir: '-' },
+      ]}
+    ]
+  },
+  {
+    id: 's2-accesorios', name: 'Accesorios', sub: 'Hombros · Lumbar · Core',
+    sections: [
+      { label: 'Calentamiento', exercises: [
+        { name: 'Movilidad articular y funcional', rp: "5'", rpe: 'x', series: 1, pausa: 'x', rir: '-' },
+      ]},
+      { label: 'Trabajo inicial', exercises: [
+        { name: 'Press militar en máquina', rp: 10, rpe: 8, series: 2, pausa: '2.5', rir: 3 },
+        { name: 'Laterales con mancuernas', rp: 12, rpe: 8, series: 3, pausa: '2.5', rir: 3 },
+        { name: 'Hiperextensión lumbar', rp: 10, rpe: 7, series: 3, pausa: '2.5', rir: 3 },
+        { name: 'Rackpull', rp: 10, rpe: 6, series: 3, pausa: '2.5', rir: 3 },
+        { name: 'Pallof press', rp: 15, rpe: 6, series: 4, pausa: '2.5', rir: 3 },
+      ]},
+      { label: 'Vuelta a la calma', exercises: [
+        { name: 'Ejercicio cardiovascular', rp: 20, rpe: 4, series: 1, pausa: '-', rir: '-' },
+      ]}
+    ]
+  },
+  {
+    id: 's2-empuje-traccion', name: 'Empuje/Tracción', sub: 'Empuje · Tracción',
+    sections: [
+      { label: 'Calentamiento', exercises: [
+        { name: 'Movilidad articular y funcional', rp: "5'", rpe: 'x', series: 1, pausa: 'x', rir: '-' },
+      ]},
+      { label: 'Trabajo inicial', exercises: [
+        { name: 'Press de banco pin', rp: 8, rpe: 8, series: '-', pausa: '-', rir: '-' },
+        { name: 'Dominadas predominancia excéntrica', rp: 10, rpe: 7, series: '-', pausa: '-', rir: '-' },
+        { name: 'Fondos negativos', rp: 12, rpe: 7, series: '-', pausa: '-', rir: '-' },
+        { name: 'Remo unilateral con mancuerna', rp: 10, rpe: 6, series: '-', pausa: '-', rir: '-' },
+      ]},
+      { label: 'Vuelta a la calma', exercises: [
+        { name: 'Ejercicio cardiovascular', rp: 20, rpe: 4, series: 1, pausa: '-', rir: '-' },
+      ]}
+    ]
+  }
+];
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let activeSemana = 1;
 let activeDay = 0;
-let data = JSON.parse(localStorage.getItem('talo-tracker-v2') || '{}');
+let data = JSON.parse(localStorage.getItem('talo-tracker-v3') || '{}');
 let editingKey = null;
 
+function getCurrentDays() {
+  return activeSemana === 1 ? DAYS_S1 : DAYS_S2;
+}
+
+function switchSemana(n) {
+  activeSemana = n;
+  activeDay = 0;
+  document.getElementById('btnS1').classList.toggle('active', n === 1);
+  document.getElementById('btnS2').classList.toggle('active', n === 2);
+  buildUI();
+}
+
 function buildUI() {
+  const DAYS = getCurrentDays();
   const tabsEl = document.getElementById('dayTabs');
   const panelsEl = document.getElementById('dayPanels');
   tabsEl.innerHTML = '';
@@ -328,7 +490,9 @@ function buildUI() {
     const panel = document.createElement('div');
     panel.className = 'day-panel' + (di === activeDay ? ' active' : '');
 
-    const totalSeries = day.sections.reduce((acc, s) => acc + s.exercises.reduce((a, e) => a + e.series, 0), 0);
+    const totalSeries = day.sections.reduce((acc, s) => acc + s.exercises.reduce((a, e) => {
+      const n = parseInt(e.series); return a + (isNaN(n) ? 0 : n);
+    }, 0), 0);
     const doneSeries = countDone(day.id, day.sections);
     const pct = totalSeries > 0 ? Math.round((doneSeries / totalSeries) * 100) : 0;
 
@@ -359,28 +523,35 @@ function buildExCard(key, ex, customName, isOpen) {
   const seriesArr = saved.series || {};
   const nota = saved.nota || '';
   const openClass = isOpen ? ' open' : '';
+  const numSeries = parseInt(ex.series);
+  const hasRows = !isNaN(numSeries) && numSeries > 0;
 
   let seriesRows = '';
-  for (let i = 0; i < ex.series; i++) {
-    const s = seriesArr[i] || {};
-    const doneClass = s.done ? ' done' : '';
-    const doneIcon = s.done ? '✓' : '';
-    seriesRows += `
-      <div class="serie-row">
-        <div class="serie-num">${i+1}</div>
-        <input class="serie-input" type="number" placeholder="${ex.rp}" value="${s.reps || ''}" inputmode="numeric"
-          onchange="saveField('${key}','series',${i},'reps',this.value)">
-        <input class="serie-input" type="number" placeholder="kg" value="${s.carga || ''}" inputmode="decimal"
-          onchange="saveField('${key}','series',${i},'carga',this.value)">
-        <input class="serie-input" type="number" placeholder="${ex.rpe}" value="${s.rpe || ''}" inputmode="decimal" style="font-size:12px"
-          onchange="saveField('${key}','series',${i},'rpe',this.value)">
-        <input class="serie-input" type="number" placeholder="${ex.rir}" value="${s.rir || ''}" inputmode="numeric" style="font-size:12px"
-          onchange="saveField('${key}','series',${i},'rir',this.value)">
-        <div class="serie-status">
-          <button class="check-btn${doneClass}" data-key="${key}" data-idx="${i}">${doneIcon}</button>
-        </div>
-      </div>`;
+  if (hasRows) {
+    for (let i = 0; i < numSeries; i++) {
+      const s = seriesArr[i] || {};
+      const doneClass = s.done ? ' done' : '';
+      const doneIcon = s.done ? '✓' : '';
+      seriesRows += `
+        <div class="serie-row">
+          <div class="serie-num">${i+1}</div>
+          <input class="serie-input" type="number" placeholder="${ex.rp}" value="${s.reps || ''}" inputmode="numeric"
+            onchange="saveField('${key}','series',${i},'reps',this.value)">
+          <input class="serie-input" type="number" placeholder="kg" value="${s.carga || ''}" inputmode="decimal"
+            onchange="saveField('${key}','series',${i},'carga',this.value)">
+          <input class="serie-input" type="number" placeholder="${ex.rpe}" value="${s.rpe || ''}" inputmode="decimal" style="font-size:12px"
+            onchange="saveField('${key}','series',${i},'rpe',this.value)">
+          <input class="serie-input" type="number" placeholder="${ex.rir}" value="${s.rir || ''}" inputmode="numeric" style="font-size:12px"
+            onchange="saveField('${key}','series',${i},'rir',this.value)">
+          <div class="serie-status">
+            <button class="check-btn${doneClass}" data-key="${key}" data-idx="${i}">${doneIcon}</button>
+          </div>
+        </div>`;
+    }
   }
+
+  const rirDisplay = ex.rir === '-' ? '-' : `RIR ${ex.rir}`;
+  const seriesDisplay = ex.series === '-' ? '-' : `${ex.series} ×`;
 
   return `
     <div class="exercise-card${openClass}" data-key="${key}">
@@ -391,19 +562,20 @@ function buildExCard(key, ex, customName, isOpen) {
             <button class="edit-name-btn" data-key="${key}" data-name="${customName}" onclick="openModal(event, '${key}', this.dataset.name)">✎ editar</button>
           </div>
           <div class="exercise-meta">
-            <span class="meta-pill">${ex.series} × ${ex.rp} reps</span>
+            <span class="meta-pill">${seriesDisplay} ${ex.rp} reps</span>
             <span class="meta-pill rpe">RPE ${ex.rpe}</span>
-            <span class="meta-pill">RIR ${ex.rir}</span>
+            <span class="meta-pill">${rirDisplay}</span>
             <span class="meta-pill">Pausa ${ex.pausa}′</span>
           </div>
         </div>
         <div class="exercise-chevron">⌄</div>
       </div>
       <div class="series-container">
+        ${hasRows ? `
         <div class="series-header">
           <div>#</div><div>Reps</div><div>Carga</div><div>RPE real</div><div>RIR real</div><div>✓</div>
         </div>
-        ${seriesRows}
+        ${seriesRows}` : ''}
         <div class="nota-label">Notas</div>
         <textarea class="nota-input" placeholder="Sensaciones, ajustes, PR..."
           onchange="saveNota('${key}', this.value)">${nota}</textarea>
@@ -489,8 +661,11 @@ function countDone(dayId, sections) {
       const key = `${dayId}-${si}-${ei}`;
       const saved = data[key] || {};
       const series = saved.series || {};
-      for (let i = 0; i < ex.series; i++) {
-        if (series[i] && series[i].done) count++;
+      const n = parseInt(ex.series);
+      if (!isNaN(n)) {
+        for (let i = 0; i < n; i++) {
+          if (series[i] && series[i].done) count++;
+        }
       }
     });
   });
@@ -498,8 +673,11 @@ function countDone(dayId, sections) {
 }
 
 function updateProgress() {
+  const DAYS = getCurrentDays();
   const day = DAYS[activeDay];
-  const totalSeries = day.sections.reduce((acc, s) => acc + s.exercises.reduce((a, e) => a + e.series, 0), 0);
+  const totalSeries = day.sections.reduce((acc, s) => acc + s.exercises.reduce((a, e) => {
+    const n = parseInt(e.series); return a + (isNaN(n) ? 0 : n);
+  }, 0), 0);
   const doneSeries = countDone(day.id, day.sections);
   const pct = totalSeries > 0 ? Math.round((doneSeries / totalSeries) * 100) : 0;
   const bar = document.querySelector('.progress-bar');
@@ -507,7 +685,7 @@ function updateProgress() {
 }
 
 function saveData(silent) {
-  localStorage.setItem('talo-tracker-v2', JSON.stringify(data));
+  localStorage.setItem('talo-tracker-v3', JSON.stringify(data));
   if (!silent) {
     const toast = document.getElementById('toast');
     toast.classList.add('show');
@@ -517,6 +695,7 @@ function saveData(silent) {
 
 function resetDay() {
   if (!confirm('¿Borrar datos del día actual?')) return;
+  const DAYS = getCurrentDays();
   const day = DAYS[activeDay];
   day.sections.forEach((s, si) => {
     s.exercises.forEach((ex, ei) => {
