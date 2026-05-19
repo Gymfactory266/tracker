@@ -80,9 +80,35 @@
   .toast.show { transform: translateX(-50%) translateY(0); }
   .toast.ok { background: var(--green); }
   .toast.err { background: #dc2626; }
+
+  /* LOGIN */
+  .login-screen { position: fixed; inset: 0; background: var(--dark); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px; }
+  .login-screen.hidden { display: none; }
+  .login-logo { font-family: 'Bebas Neue', sans-serif; font-size: 42px; letter-spacing: 4px; color: var(--red); margin-bottom: 6px; }
+  .login-tagline { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 48px; }
+  .login-box { width: 100%; max-width: 340px; }
+  .login-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; display: block; }
+  .login-input { width: 100%; background: var(--card); border: 0.5px solid var(--border); border-radius: 12px; padding: 16px 18px; font-size: 18px; color: var(--text); font-family: 'DM Sans', sans-serif; letter-spacing: 4px; text-align: center; transition: border-color 0.2s; margin-bottom: 16px; }
+  .login-input:focus { outline: none; border-color: var(--red); }
+  .login-input.error { border-color: #dc2626; animation: shake 0.3s; }
+  .login-btn { width: 100%; background: var(--red); color: white; border: none; border-radius: 12px; padding: 16px; font-size: 13px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity 0.2s; }
+  .login-btn:active { opacity: 0.8; }
+  .login-error { font-size: 12px; color: #dc2626; text-align: center; margin-top: 12px; min-height: 18px; }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
 </style>
 </head>
 <body>
+
+<div class="login-screen" id="loginScreen">
+  <div class="login-logo">GYM FACTORY</div>
+  <div class="login-tagline">Tracker · Talo</div>
+  <div class="login-box">
+    <label class="login-label">Contraseña</label>
+    <input class="login-input" id="loginInput" type="password" placeholder="••••••" maxlength="20" autocomplete="current-password">
+    <button class="login-btn" onclick="doLogin()">Entrar</button>
+    <div class="login-error" id="loginError"></div>
+  </div>
+</div>
 
 <div class="header">
   <div class="header-top">
@@ -457,7 +483,35 @@ document.getElementById('modalInput').addEventListener('keydown',function(e){if(
 function resetDay(){ if(!confirm('¿Borrar datos del día en pantalla?')) return; const DAYS=getCurrentDays(),day=DAYS[activeDay]; day.sections.forEach((s,si)=>s.exercises.forEach((ex,ei)=>{ const key=`${day.id}-${si}-${ei}`; if(localData[key]){localData[key].series={};localData[key].nota='';} })); buildUI(); }
 function showToast(msg,type='ok'){ const t=document.getElementById('toast'); t.textContent=msg; t.className=`toast ${type} show`; setTimeout(()=>t.classList.remove('show'),2500); }
 
-loadHistorial(getCurrentDays()[0].id).then(()=>buildUI());
+// ─── LOGIN ────────────────────────────────────────────────────────────────────
+const PASSWORD = 'gymfactory2024';
+
+function doLogin() {
+  const val = document.getElementById('loginInput').value;
+  const errEl = document.getElementById('loginError');
+  const input = document.getElementById('loginInput');
+  if (val === PASSWORD) {
+    sessionStorage.setItem('talo-auth', '1');
+    document.getElementById('loginScreen').classList.add('hidden');
+    errEl.textContent = '';
+    loadHistorial(getCurrentDays()[0].id).then(() => buildUI());
+  } else {
+    input.classList.add('error');
+    errEl.textContent = 'Contraseña incorrecta';
+    setTimeout(() => input.classList.remove('error'), 400);
+    input.value = '';
+    input.focus();
+  }
+}
+
+document.getElementById('loginInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doLogin();
+});
+
+if (sessionStorage.getItem('talo-auth') === '1') {
+  document.getElementById('loginScreen').classList.add('hidden');
+  loadHistorial(getCurrentDays()[0].id).then(() => buildUI());
+}
 </script>
 </body>
 </html>
