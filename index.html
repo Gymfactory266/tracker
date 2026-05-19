@@ -8,185 +8,78 @@
 <title>Talo — Tracker</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap');
-
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-  :root {
-    --red: #e10813;
-    --dark: #0a0a0a;
-    --card: #141414;
-    --border: rgba(255,255,255,0.07);
-    --text: #ffffff;
-    --muted: rgba(255,255,255,0.4);
-    --green: #10b981;
-    --yellow: #f59e0b;
-  }
-
-  body {
-    background: var(--dark);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    min-height: 100vh;
-    padding-bottom: 80px;
-  }
-
-  .header {
-    background: var(--dark);
-    border-bottom: 0.5px solid var(--border);
-    padding: 16px 20px 12px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .header-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 14px;
-  }
+  :root { --red: #e10813; --dark: #0a0a0a; --card: #141414; --border: rgba(255,255,255,0.07); --text: #ffffff; --muted: rgba(255,255,255,0.4); --green: #10b981; --yellow: #f59e0b; }
+  body { background: var(--dark); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; padding-bottom: 80px; }
+  .header { background: var(--dark); border-bottom: 0.5px solid var(--border); padding: 16px 20px 12px; position: sticky; top: 0; z-index: 100; }
+  .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
   .logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; color: var(--red); }
-
-  /* Semana switcher */
-  .semana-switcher {
-    display: flex; align-items: center; gap: 6px;
-    background: rgba(255,255,255,0.05); border: 0.5px solid var(--border);
-    border-radius: 20px; padding: 3px 4px;
-  }
-  .semana-btn {
-    font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
-    color: var(--muted); background: transparent; border: none;
-    padding: 4px 10px; border-radius: 16px; cursor: pointer;
-    font-family: 'DM Sans', sans-serif; font-weight: 500; transition: all 0.2s;
-  }
+  .semana-switcher { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.05); border: 0.5px solid var(--border); border-radius: 20px; padding: 3px 4px; }
+  .semana-btn { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); background: transparent; border: none; padding: 4px 10px; border-radius: 16px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 500; transition: all 0.2s; }
   .semana-btn.active { background: var(--red); color: white; }
-
   .days-scroll { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
   .days-scroll::-webkit-scrollbar { display: none; }
-  .day-tab {
-    flex-shrink: 0; padding: 7px 14px; border-radius: 20px; border: 0.5px solid var(--border);
-    font-size: 12px; font-weight: 500; color: var(--muted); background: transparent;
-    cursor: pointer; transition: all 0.2s; white-space: nowrap;
-  }
+  .day-tab { flex-shrink: 0; padding: 7px 14px; border-radius: 20px; border: 0.5px solid var(--border); font-size: 12px; font-weight: 500; color: var(--muted); background: transparent; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
   .day-tab.active { background: var(--red); border-color: var(--red); color: white; }
-
   .content { padding: 16px 16px 0; }
   .day-panel { display: none; }
   .day-panel.active { display: block; }
-
   .day-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 2px; margin-bottom: 4px; }
-  .day-subtitle { font-size: 12px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 16px; }
-
+  .day-subtitle { font-size: 12px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .day-fecha { font-size: 11px; color: var(--red); letter-spacing: 1px; margin-bottom: 16px; }
   .progress-wrap { background: rgba(255,255,255,0.06); border-radius: 4px; height: 3px; margin-bottom: 16px; overflow: hidden; }
   .progress-bar { height: 100%; background: var(--red); border-radius: 4px; transition: width 0.3s; }
-
   .section-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--red); margin: 20px 0 10px; font-weight: 600; }
-
   .exercise-card { background: var(--card); border: 0.5px solid var(--border); border-radius: 12px; margin-bottom: 12px; overflow: hidden; }
   .exercise-header { padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
   .exercise-header-left { flex: 1; }
-
   .exercise-name-wrap { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
   .exercise-name { font-size: 14px; font-weight: 600; color: var(--text); }
-  .edit-name-btn {
-    font-size: 11px; color: var(--muted); background: rgba(255,255,255,0.05);
-    border: 0.5px solid var(--border); border-radius: 6px; padding: 2px 7px;
-    cursor: pointer; flex-shrink: 0; font-family: 'DM Sans', sans-serif;
-    transition: all 0.2s;
-  }
+  .edit-name-btn { font-size: 11px; color: var(--muted); background: rgba(255,255,255,0.05); border: 0.5px solid var(--border); border-radius: 6px; padding: 2px 7px; cursor: pointer; flex-shrink: 0; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
   .edit-name-btn:active { background: rgba(225,8,19,0.15); border-color: var(--red); color: var(--red); }
-
   .exercise-meta { display: flex; gap: 8px; flex-wrap: wrap; }
   .meta-pill { font-size: 11px; color: var(--muted); background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 10px; }
   .meta-pill.rpe { color: var(--yellow); }
   .exercise-chevron { font-size: 18px; color: var(--muted); transition: transform 0.2s; margin-left: 12px; }
   .exercise-card.open .exercise-chevron { transform: rotate(180deg); }
-
   .series-container { display: none; padding: 0 16px 16px; border-top: 0.5px solid var(--border); }
   .exercise-card.open .series-container { display: block; }
-
-  .series-header {
-    display: grid; grid-template-columns: 28px 1fr 1fr 60px 60px 50px;
-    gap: 6px; padding: 10px 0 6px;
-    font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted);
-  }
+  .series-header { display: grid; grid-template-columns: 28px 1fr 1fr 60px 60px 50px; gap: 6px; padding: 10px 0 6px; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
   .serie-row { display: grid; grid-template-columns: 28px 1fr 1fr 60px 60px 50px; gap: 6px; align-items: center; margin-bottom: 8px; }
   .serie-num { font-size: 13px; font-weight: 600; color: var(--red); text-align: center; }
-
-  .serie-input {
-    background: rgba(255,255,255,0.06); border: 0.5px solid var(--border); border-radius: 8px;
-    padding: 10px; font-size: 14px; color: var(--text); font-family: 'DM Sans', sans-serif;
-    width: 100%; text-align: center; transition: border-color 0.2s;
-  }
+  .serie-input { background: rgba(255,255,255,0.06); border: 0.5px solid var(--border); border-radius: 8px; padding: 10px; font-size: 14px; color: var(--text); font-family: 'DM Sans', sans-serif; width: 100%; text-align: center; transition: border-color 0.2s; }
   .serie-input:focus { outline: none; border-color: var(--red); }
   .serie-input::placeholder { color: rgba(255,255,255,0.2); font-size: 12px; }
-
   .serie-status { display: flex; align-items: center; justify-content: center; }
-  .check-btn {
-    width: 32px; height: 32px; border-radius: 50%; border: 0.5px solid var(--border);
-    background: transparent; cursor: pointer; display: flex; align-items: center;
-    justify-content: center; font-size: 14px; color: var(--muted); transition: all 0.2s;
-  }
+  .check-btn { width: 32px; height: 32px; border-radius: 50%; border: 0.5px solid var(--border); background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; color: var(--muted); transition: all 0.2s; }
   .check-btn.done { background: var(--green); border-color: var(--green); color: white; }
-
+  .hist-section { margin-top: 10px; }
+  .hist-label { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .hist-row { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; }
+  .hist-row::-webkit-scrollbar { display: none; }
+  .hist-chip { flex-shrink: 0; background: rgba(255,255,255,0.04); border: 0.5px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 11px; color: var(--muted); white-space: nowrap; }
+  .hist-chip span { color: var(--text); font-weight: 600; }
   .nota-label { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin: 10px 0 6px; }
-  .nota-input {
-    background: rgba(255,255,255,0.04); border: 0.5px solid var(--border); border-radius: 8px;
-    padding: 10px 12px; font-size: 13px; color: var(--text); font-family: 'DM Sans', sans-serif;
-    width: 100%; resize: none; min-height: 60px; transition: border-color 0.2s;
-  }
+  .nota-input { background: rgba(255,255,255,0.04); border: 0.5px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 13px; color: var(--text); font-family: 'DM Sans', sans-serif; width: 100%; resize: none; min-height: 60px; transition: border-color 0.2s; }
   .nota-input:focus { outline: none; border-color: rgba(225,8,19,0.4); }
   .nota-input::placeholder { color: rgba(255,255,255,0.2); }
-
-  .modal-overlay {
-    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85);
-    z-index: 999; align-items: center; justify-content: center; padding: 20px;
-  }
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 999; align-items: center; justify-content: center; padding: 20px; }
   .modal-overlay.show { display: flex; }
-  .modal {
-    background: #1a1a1a; border: 0.5px solid rgba(255,255,255,0.1);
-    border-radius: 16px; padding: 28px 24px; width: 100%; max-width: 400px;
-  }
+  .modal { background: #1a1a1a; border: 0.5px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 28px 24px; width: 100%; max-width: 400px; }
   .modal-title { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--red); margin-bottom: 16px; }
-  .modal-input {
-    background: rgba(255,255,255,0.06); border: 0.5px solid rgba(255,255,255,0.15);
-    border-radius: 10px; padding: 14px 16px; font-size: 15px; color: var(--text);
-    font-family: 'DM Sans', sans-serif; width: 100%; margin-bottom: 16px;
-  }
+  .modal-input { background: rgba(255,255,255,0.06); border: 0.5px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 14px 16px; font-size: 15px; color: var(--text); font-family: 'DM Sans', sans-serif; width: 100%; margin-bottom: 16px; }
   .modal-input:focus { outline: none; border-color: var(--red); }
   .modal-btns { display: flex; gap: 10px; }
-  .modal-ok {
-    flex: 1; background: var(--red); color: white; border: none; border-radius: 10px;
-    padding: 14px; font-size: 13px; font-weight: 600; letter-spacing: 1px;
-    text-transform: uppercase; cursor: pointer; font-family: 'DM Sans', sans-serif;
-  }
-  .modal-cancel {
-    background: rgba(255,255,255,0.06); color: var(--muted); border: 0.5px solid var(--border);
-    border-radius: 10px; padding: 14px 18px; font-size: 13px; cursor: pointer; font-family: 'DM Sans', sans-serif;
-  }
-
-  .bottom-bar {
-    position: fixed; bottom: 0; left: 0; right: 0;
-    background: rgba(10,10,10,0.95); backdrop-filter: blur(20px);
-    border-top: 0.5px solid var(--border); padding: 12px 20px;
-    display: flex; gap: 10px; z-index: 100;
-  }
-  .save-btn {
-    flex: 1; background: var(--red); color: white; border: none; border-radius: 10px;
-    padding: 14px; font-size: 13px; font-weight: 600; letter-spacing: 1px;
-    text-transform: uppercase; cursor: pointer; font-family: 'DM Sans', sans-serif;
-  }
-  .save-btn:active { opacity: 0.8; }
-  .reset-btn {
-    background: rgba(255,255,255,0.06); color: var(--muted); border: 0.5px solid var(--border);
-    border-radius: 10px; padding: 14px 18px; font-size: 13px; cursor: pointer; font-family: 'DM Sans', sans-serif;
-  }
-
-  .toast {
-    position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
-    background: var(--green); color: white; padding: 12px 24px; border-radius: 30px;
-    font-size: 13px; font-weight: 600; z-index: 9999; transition: transform 0.3s;
-  }
+  .modal-ok { flex: 1; background: var(--red); color: white; border: none; border-radius: 10px; padding: 14px; font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+  .modal-cancel { background: rgba(255,255,255,0.06); color: var(--muted); border: 0.5px solid var(--border); border-radius: 10px; padding: 14px 18px; font-size: 13px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+  .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(10,10,10,0.95); backdrop-filter: blur(20px); border-top: 0.5px solid var(--border); padding: 12px 20px; display: flex; gap: 10px; z-index: 100; }
+  .save-btn { flex: 1; background: var(--red); color: white; border: none; border-radius: 10px; padding: 14px; font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity 0.2s; }
+  .save-btn:disabled { opacity: 0.5; }
+  .reset-btn { background: rgba(255,255,255,0.06); color: var(--muted); border: 0.5px solid var(--border); border-radius: 10px; padding: 14px 18px; font-size: 13px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+  .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); color: white; padding: 12px 24px; border-radius: 30px; font-size: 13px; font-weight: 600; z-index: 9999; transition: transform 0.3s; }
   .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.ok { background: var(--green); }
+  .toast.err { background: #dc2626; }
 </style>
 </head>
 <body>
@@ -217,497 +110,354 @@
 
 <div class="bottom-bar">
   <button class="reset-btn" onclick="resetDay()">↺</button>
-  <button class="save-btn" onclick="saveData()">Guardar sesión</button>
+  <button class="save-btn" id="saveBtn" onclick="saveSession()">Guardar sesión</button>
 </div>
 
-<div class="toast" id="toast">✓ Guardado</div>
+<div class="toast" id="toast"></div>
 
 <script>
-// ─── SEMANA 1 ───────────────────────────────────────────────────────────────
+const SUPA_URL = 'https://twrrahhnmmqbcnvvamcw.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR3cnJhaGhubW1xYmNudnZhbWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxNDE0MDMsImV4cCI6MjA5NDcxNzQwM30.OR8LFl-sQZcpLWeNh-LeMy6K_eMHyTFVaMvtonZ9mRg';
+
+async function supaFetch(path, method='GET', body=null) {
+  const opts = { method, headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer '+SUPA_KEY, 'Content-Type': 'application/json', 'Prefer': method==='POST' ? 'resolution=merge-duplicates' : '' } };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(SUPA_URL+path, opts);
+  if (!res.ok) throw new Error(await res.text());
+  return method==='GET' ? res.json() : res;
+}
+
 const DAYS_S1 = [
-  {
-    id: 's1-empuje', name: 'Empuje', sub: 'Pecho · Hombro · Tríceps',
-    sections: [
-      { label: 'Calentamiento', exercises: [
-        { name: 'Movilidad articular y funcional', rp: "5'", rpe: 'x', series: 1, pausa: 'x', rir: '-' },
-      ]},
-      { label: 'Trabajo inicial', exercises: [
-        { name: 'Press de banco grip cerrado', rp: 8, rpe: 8, series: 3, pausa: '2.5', rir: 3 },
-        { name: 'Press con mancuernas inclinado', rp: 10, rpe: 8, series: 3, pausa: '2.5', rir: 2 },
-        { name: 'Extensión de tríceps unilateral', rp: 10, rpe: 7, series: 3, pausa: '2.5', rir: 2 },
-        { name: 'Extensión tras nuca bilateral', rp: 12, rpe: 6, series: 3, pausa: '2.5', rir: 3 },
-        { name: 'Press francés', rp: 12, rpe: 6, series: 3, pausa: '2.5', rir: 2 },
-        { name: 'Elevación frontal con mancuernas', rp: 8, rpe: 8, series: 3, pausa: '2.5', rir: 2 },
-      ]},
-      { label: 'Vuelta a la calma', exercises: [
-        { name: 'Ejercicio cardiovascular', rp: 20, rpe: 4, series: 1, pausa: '-', rir: '-' },
-      ]}
-    ]
-  },
-  {
-    id: 's1-traccion', name: 'Tracción', sub: 'Espalda · Bíceps',
-    sections: [
-      { label: 'Calentamiento', exercises: [
-        { name: 'Movilidad articular y funcional', rp: "5'", rpe: 'x', series: 1, pausa: 'x', rir: '-' },
-      ]},
-      { label: 'Trabajo inicial', exercises: [
-        { name: 'Jalón alto cerrado', rp: 10, rpe: 8, series: 2, pausa: '2.5', rir: 2 },
-        { name: 'Dominada de potencia y bajada controlada', rp: 8, rpe: 8, series: 3, pausa: '2.5', rir: 2 },
-        { name: 'Remo en polea agarre cerrado', rp: 12, rpe: 7, series: 3, pausa: '2.5', rir: 2 },
-        { name: 'Posterior en máquina', rp: 12, rpe: 7, series: 3, pausa: '2.5', rir: 1 },
-        { name: 'Curl con banco inclinado', rp: 10, rpe: 7, series: 4, pausa: '2.5', rir: 2 },
-        { name: 'Curl libre con barra Z', rp: 8, rpe: 7, series: 4, pausa: '2.5', rir: 2 },
-      ]},
-      { label: 'Vuelta a la calma', exercises: [
-        { name: 'Ejercicio cardiovascular', rp: 20, rpe: 4, series: 1, pausa: '-', rir: '-' },
-      ]}
-    ]
-  },
-  {
-    id: 's1-piernas', name: 'Piernas', sub: 'Cuádriceps · Isquios · Glúteos',
-    sections: [
-      { label: 'Calentamiento', exercises: [
-        { name: 'Movilidad articular y funcional', rp: "5'", rpe: 'x', series: 1, pausa: 'x', rir: '-' },
-      ]},
-      { label: 'Trabajo inicial', exercises: [
-        { name: 'Extensión de cuádriceps lentas', rp: 10, rpe: 8, series: 3, pausa: '2.5', rir: 1 },
-        { name: 'Sentadilla en Smith', rp: 8, rpe: 8, series: 2, pausa: '2.5', rir: 3 },
-        { name: 'Peso muerto rumano en 2 tiempos', rp: 8, rpe: 7, series: 3, pausa: '2.5', rir: 2 },
-        { name: 'Hip Thrust en máquina', rp: 12, rpe: 7, series: 3, pausa: '2.5', rir: 2 },
-        { name: 'Aductor en máquina', rp: 12, rpe: 7, series: 4, pausa: '2.5', rir: '-' },
-        { name: 'Curl femoral acostado', rp: 10, rpe: 8, series: 4, pausa: '2.5', rir: '-' },
-      ]},
-      { label: 'Vuelta a la calma', exercises: [
-        { name: 'Ejercicio cardiovascular', rp: 20, rpe: 4, series: 1, pausa: '-', rir: '-' },
-      ]}
-    ]
-  },
-  {
-    id: 's1-brazos', name: 'Brazos', sub: 'Hipertrofia Bíceps · Tríceps · Hombros',
-    sections: [
-      { label: 'Calentamiento', exercises: [
-        { name: 'Movilidad articular y funcional', rp: "5'", rpe: 'x', series: 1, pausa: 'x', rir: '-' },
-      ]},
-      { label: 'Trabajo inicial', exercises: [
-        { name: 'Laterales en polea', rp: 15, rpe: 8, series: 3, pausa: '2.5', rir: 1 },
-        { name: 'Patada de posterior', rp: 12, rpe: 8, series: 3, pausa: '2.5', rir: 1 },
-        { name: 'Curl en banco Scott', rp: 8, rpe: 8, series: 3, pausa: '2.5', rir: 1 },
-        { name: 'Martillo con banco inclinado', rp: 15, rpe: 8, series: 3, pausa: '2.5', rir: 2 },
-        { name: 'Extensión de tríceps en polea', rp: 10, rpe: 8, series: 3, pausa: '2.5', rir: 1 },
-        { name: 'Extensión tras nuca en polea', rp: 10, rpe: 8, series: 3, pausa: '2.5', rir: 1 },
-      ]},
-      { label: 'Vuelta a la calma', exercises: [
-        { name: 'Ejercicio cardiovascular', rp: 20, rpe: 4, series: 1, pausa: '-', rir: '-' },
-      ]}
-    ]
-  },
-  {
-    id: 's1-acc-piernas', name: 'Acc. Piernas', sub: 'Accesorios · Gemelos · Glúteos',
-    sections: [
-      { label: 'Calentamiento', exercises: [
-        { name: 'Movilidad articular y funcional', rp: "5'", rpe: 'x', series: 1, pausa: 'x', rir: '-' },
-      ]},
-      { label: 'Trabajo inicial', exercises: [
-        { name: 'Gemelos en máquina', rp: 15, rpe: 8, series: 2, pausa: '2.5', rir: '-' },
-        { name: 'Sentadilla sumo en máquina', rp: 10, rpe: 6, series: 3, pausa: '2.5', rir: 2 },
-        { name: 'Buenos días', rp: 12, rpe: 7, series: 3, pausa: '2.5', rir: 2 },
-        { name: 'Estocadas en movimiento', rp: 10, rpe: 7, series: 3, pausa: '2.5', rir: 1 },
-        { name: 'Hack Squat', rp: 8, rpe: 8, series: 4, pausa: '2.5', rir: 1 },
-      ]},
-      { label: 'Vuelta a la calma', exercises: [
-        { name: 'Ejercicio cardiovascular', rp: 20, rpe: 4, series: 1, pausa: '-', rir: '-' },
-      ]}
-    ]
-  },
-  {
-    id: 's1-core', name: 'Core', sub: 'Lumbar · Abdomen · Hombros',
-    sections: [
-      { label: 'Calentamiento', exercises: [
-        { name: 'Movilidad articular y funcional', rp: "5'", rpe: 'x', series: 1, pausa: 'x', rir: '-' },
-      ]},
-      { label: 'Trabajo inicial', exercises: [
-        { name: 'Hiperextensiones lumbares', rp: 15, rpe: 6, series: 3, pausa: '-', rir: '-' },
-        { name: 'Press militar parado con barra', rp: 10, rpe: 7, series: 3, pausa: '-', rir: '-' },
-        { name: 'Pallof press con banda', rp: 15, rpe: 6, series: 3, pausa: '-', rir: '-' },
-        { name: 'Extensiones de tríceps con banda elástica', rp: 15, rpe: 6, series: 3, pausa: '-', rir: '-' },
-        { name: 'L-sit', rp: 12, rpe: 6, series: 3, pausa: '-', rir: '-' },
-      ]},
-      { label: 'Vuelta a la calma', exercises: [
-        { name: 'Ejercicio cardiovascular', rp: 20, rpe: 4, series: 1, pausa: '-', rir: '-' },
-      ]}
-    ]
-  }
+  { id:'s1-empuje', name:'Empuje', sub:'Pecho · Hombro · Tríceps', sections:[
+    { label:'Calentamiento', exercises:[{ name:'Movilidad articular y funcional', rp:"5'", rpe:'x', series:1, pausa:'x', rir:'-' }]},
+    { label:'Trabajo inicial', exercises:[
+      { name:'Press de banco grip cerrado', rp:8, rpe:8, series:3, pausa:'2.5', rir:3 },
+      { name:'Press con mancuernas inclinado', rp:10, rpe:8, series:3, pausa:'2.5', rir:2 },
+      { name:'Extensión de tríceps unilateral', rp:10, rpe:7, series:3, pausa:'2.5', rir:2 },
+      { name:'Extensión tras nuca bilateral', rp:12, rpe:6, series:3, pausa:'2.5', rir:3 },
+      { name:'Press francés', rp:12, rpe:6, series:3, pausa:'2.5', rir:2 },
+      { name:'Elevación frontal con mancuernas', rp:8, rpe:8, series:3, pausa:'2.5', rir:2 },
+    ]},
+    { label:'Vuelta a la calma', exercises:[{ name:'Ejercicio cardiovascular', rp:20, rpe:4, series:1, pausa:'-', rir:'-' }]}
+  ]},
+  { id:'s1-traccion', name:'Tracción', sub:'Espalda · Bíceps', sections:[
+    { label:'Calentamiento', exercises:[{ name:'Movilidad articular y funcional', rp:"5'", rpe:'x', series:1, pausa:'x', rir:'-' }]},
+    { label:'Trabajo inicial', exercises:[
+      { name:'Jalón alto cerrado', rp:10, rpe:8, series:2, pausa:'2.5', rir:2 },
+      { name:'Dominada de potencia y bajada controlada', rp:8, rpe:8, series:3, pausa:'2.5', rir:2 },
+      { name:'Remo en polea agarre cerrado', rp:12, rpe:7, series:3, pausa:'2.5', rir:2 },
+      { name:'Posterior en máquina', rp:12, rpe:7, series:3, pausa:'2.5', rir:1 },
+      { name:'Curl con banco inclinado', rp:10, rpe:7, series:4, pausa:'2.5', rir:2 },
+      { name:'Curl libre con barra Z', rp:8, rpe:7, series:4, pausa:'2.5', rir:2 },
+    ]},
+    { label:'Vuelta a la calma', exercises:[{ name:'Ejercicio cardiovascular', rp:20, rpe:4, series:1, pausa:'-', rir:'-' }]}
+  ]},
+  { id:'s1-piernas', name:'Piernas', sub:'Cuádriceps · Isquios · Glúteos', sections:[
+    { label:'Calentamiento', exercises:[{ name:'Movilidad articular y funcional', rp:"5'", rpe:'x', series:1, pausa:'x', rir:'-' }]},
+    { label:'Trabajo inicial', exercises:[
+      { name:'Extensión de cuádriceps lentas', rp:10, rpe:8, series:3, pausa:'2.5', rir:1 },
+      { name:'Sentadilla en Smith', rp:8, rpe:8, series:2, pausa:'2.5', rir:3 },
+      { name:'Peso muerto rumano en 2 tiempos', rp:8, rpe:7, series:3, pausa:'2.5', rir:2 },
+      { name:'Hip Thrust en máquina', rp:12, rpe:7, series:3, pausa:'2.5', rir:2 },
+      { name:'Aductor en máquina', rp:12, rpe:7, series:4, pausa:'2.5', rir:'-' },
+      { name:'Curl femoral acostado', rp:10, rpe:8, series:4, pausa:'2.5', rir:'-' },
+    ]},
+    { label:'Vuelta a la calma', exercises:[{ name:'Ejercicio cardiovascular', rp:20, rpe:4, series:1, pausa:'-', rir:'-' }]}
+  ]},
+  { id:'s1-brazos', name:'Brazos', sub:'Bíceps · Tríceps · Hombros', sections:[
+    { label:'Calentamiento', exercises:[{ name:'Movilidad articular y funcional', rp:"5'", rpe:'x', series:1, pausa:'x', rir:'-' }]},
+    { label:'Trabajo inicial', exercises:[
+      { name:'Laterales en polea', rp:15, rpe:8, series:3, pausa:'2.5', rir:1 },
+      { name:'Patada de posterior', rp:12, rpe:8, series:3, pausa:'2.5', rir:1 },
+      { name:'Curl en banco Scott', rp:8, rpe:8, series:3, pausa:'2.5', rir:1 },
+      { name:'Martillo con banco inclinado', rp:15, rpe:8, series:3, pausa:'2.5', rir:2 },
+      { name:'Extensión de tríceps en polea', rp:10, rpe:8, series:3, pausa:'2.5', rir:1 },
+      { name:'Extensión tras nuca en polea', rp:10, rpe:8, series:3, pausa:'2.5', rir:1 },
+    ]},
+    { label:'Vuelta a la calma', exercises:[{ name:'Ejercicio cardiovascular', rp:20, rpe:4, series:1, pausa:'-', rir:'-' }]}
+  ]},
+  { id:'s1-acc-piernas', name:'Acc. Piernas', sub:'Accesorios · Gemelos · Glúteos', sections:[
+    { label:'Calentamiento', exercises:[{ name:'Movilidad articular y funcional', rp:"5'", rpe:'x', series:1, pausa:'x', rir:'-' }]},
+    { label:'Trabajo inicial', exercises:[
+      { name:'Gemelos en máquina', rp:15, rpe:8, series:2, pausa:'2.5', rir:'-' },
+      { name:'Sentadilla sumo en máquina', rp:10, rpe:6, series:3, pausa:'2.5', rir:2 },
+      { name:'Buenos días', rp:12, rpe:7, series:3, pausa:'2.5', rir:2 },
+      { name:'Estocadas en movimiento', rp:10, rpe:7, series:3, pausa:'2.5', rir:1 },
+      { name:'Hack Squat', rp:8, rpe:8, series:4, pausa:'2.5', rir:1 },
+    ]},
+    { label:'Vuelta a la calma', exercises:[{ name:'Ejercicio cardiovascular', rp:20, rpe:4, series:1, pausa:'-', rir:'-' }]}
+  ]},
+  { id:'s1-core', name:'Core', sub:'Lumbar · Abdomen · Hombros', sections:[
+    { label:'Calentamiento', exercises:[{ name:'Movilidad articular y funcional', rp:"5'", rpe:'x', series:1, pausa:'x', rir:'-' }]},
+    { label:'Trabajo inicial', exercises:[
+      { name:'Hiperextensiones lumbares', rp:15, rpe:6, series:3, pausa:'-', rir:'-' },
+      { name:'Press militar parado con barra', rp:10, rpe:7, series:3, pausa:'-', rir:'-' },
+      { name:'Pallof press con banda', rp:15, rpe:6, series:3, pausa:'-', rir:'-' },
+      { name:'Extensiones de tríceps con banda elástica', rp:15, rpe:6, series:3, pausa:'-', rir:'-' },
+      { name:'L-sit', rp:12, rpe:6, series:3, pausa:'-', rir:'-' },
+    ]},
+    { label:'Vuelta a la calma', exercises:[{ name:'Ejercicio cardiovascular', rp:20, rpe:4, series:1, pausa:'-', rir:'-' }]}
+  ]}
 ];
 
-// ─── SEMANA 2 ───────────────────────────────────────────────────────────────
 const DAYS_S2 = [
-  {
-    id: 's2-pecho-biceps', name: 'Pecho / Bíceps', sub: 'Pecho · Bíceps',
-    sections: [
-      { label: 'Calentamiento', exercises: [
-        { name: 'Movilidad articular y funcional', rp: "5'", rpe: 'x', series: 1, pausa: 'x', rir: '-' },
-      ]},
-      { label: 'Trabajo inicial', exercises: [
-        { name: 'Press en smith inclinado', rp: 8, rpe: 7, series: 3, pausa: '2.5', rir: 3 },
-        { name: 'Press frontal máquina', rp: 10, rpe: 6, series: 3, pausa: '2.5', rir: 3 },
-        { name: 'Aperturas altas de pecho', rp: 10, rpe: 6, series: 3, pausa: '2.5', rir: 3 },
-        { name: 'Aperturas baja en polea', rp: 10, rpe: 6, series: 3, pausa: '2.5', rir: 3 },
-        { name: 'Curl martillo', rp: 12, rpe: 6, series: 3, pausa: '2.5', rir: 3 },
-        { name: 'Curl inclinado', rp: 10, rpe: 7, series: 3, pausa: '2.5', rir: 3 },
-        { name: 'Curl banco scott máquina', rp: 10, rpe: 7, series: 3, pausa: '2.5', rir: 3 },
-      ]},
-      { label: 'Vuelta a la calma', exercises: [
-        { name: 'Ejercicio cardiovascular', rp: 20, rpe: 4, series: 1, pausa: '-', rir: '-' },
-      ]}
-    ]
-  },
-  {
-    id: 's2-cuad-gluteo', name: 'Cuád / Glúteo', sub: 'Cuádriceps · Glúteo',
-    sections: [
-      { label: 'Calentamiento', exercises: [
-        { name: 'Movilidad articular y funcional', rp: "5'", rpe: 'x', series: 1, pausa: 'x', rir: '-' },
-      ]},
-      { label: 'Trabajo inicial', exercises: [
-        { name: 'Extensiones de cuádriceps', rp: 10, rpe: 7, series: 2, pausa: '2.5', rir: 3 },
-        { name: 'Sentadilla en hacksquat', rp: 10, rpe: 7, series: 3, pausa: '2.5', rir: 3 },
-        { name: 'Estocada estática', rp: 10, rpe: 7, series: 3, pausa: '2.5', rir: 3 },
-        { name: 'Hip trust', rp: 10, rpe: 7, series: 3, pausa: '2.5', rir: 2 },
-        { name: 'Hiperextensión lumbar', rp: 8, rpe: 7, series: 4, pausa: '2.5', rir: 3 },
-        { name: 'Gemelos parado', rp: 12, rpe: 7, series: 4, pausa: '2.5', rir: '-' },
-      ]},
-      { label: 'Vuelta a la calma', exercises: [
-        { name: 'Ejercicio cardiovascular', rp: 20, rpe: 4, series: 1, pausa: '-', rir: '-' },
-      ]}
-    ]
-  },
-  {
-    id: 's2-espalda-triceps', name: 'Espalda / Tríceps', sub: 'Espalda · Tríceps',
-    sections: [
-      { label: 'Calentamiento', exercises: [
-        { name: 'Movilidad articular y funcional', rp: "5'", rpe: 'x', series: 1, pausa: 'x', rir: '-' },
-      ]},
-      { label: 'Trabajo inicial', exercises: [
-        { name: 'Jalón alto supino', rp: 8, rpe: 7, series: 3, pausa: '2.5', rir: 3 },
-        { name: 'Jalón unilateral máquina', rp: 8, rpe: 7, series: 2, pausa: '2.5', rir: 3 },
-        { name: 'Remo en T', rp: 10, rpe: 7, series: 3, pausa: '2.5', rir: 3 },
-        { name: 'Remo libre con barra', rp: 8, rpe: 7, series: 3, pausa: '2.5', rir: 3 },
-        { name: 'Extensión de tríceps drop set', rp: 12, rpe: 7, series: 4, pausa: '2.5', rir: 3 },
-        { name: 'Extensión tras nuca', rp: 10, rpe: 7, series: 4, pausa: '2.5', rir: 3 },
-      ]},
-      { label: 'Vuelta a la calma', exercises: [
-        { name: 'Ejercicio cardiovascular', rp: 20, rpe: 4, series: 1, pausa: '-', rir: '-' },
-      ]}
-    ]
-  },
-  {
-    id: 's2-isquios-gluteo', name: 'Isquios / Glúteo', sub: 'Isquiotibiales · Glúteo',
-    sections: [
-      { label: 'Calentamiento', exercises: [
-        { name: 'Movilidad articular y funcional', rp: "5'", rpe: 'x', series: 1, pausa: 'x', rir: '-' },
-      ]},
-      { label: 'Trabajo inicial', exercises: [
-        { name: 'Peso muerto rumano', rp: 8, rpe: 7, series: 3, pausa: '2.5', rir: 3 },
-        { name: 'Curl femoral acostado', rp: 12, rpe: 7, series: 3, pausa: '2.5', rir: 3 },
-        { name: 'Curl femoral sentado', rp: 12, rpe: 8, series: 3, pausa: '2.5', rir: 3 },
-        { name: 'Hip trust', rp: 10, rpe: 8, series: 3, pausa: '2.5', rir: 2 },
-        { name: 'Abductor', rp: 15, rpe: 7, series: 3, pausa: '2.5', rir: 3 },
-        { name: 'Buenos días', rp: 10, rpe: 7, series: 3, pausa: '2.5', rir: 3 },
-      ]},
-      { label: 'Vuelta a la calma', exercises: [
-        { name: 'Ejercicio cardiovascular', rp: 20, rpe: 4, series: 1, pausa: '-', rir: '-' },
-      ]}
-    ]
-  },
-  {
-    id: 's2-accesorios', name: 'Accesorios', sub: 'Hombros · Lumbar · Core',
-    sections: [
-      { label: 'Calentamiento', exercises: [
-        { name: 'Movilidad articular y funcional', rp: "5'", rpe: 'x', series: 1, pausa: 'x', rir: '-' },
-      ]},
-      { label: 'Trabajo inicial', exercises: [
-        { name: 'Press militar en máquina', rp: 10, rpe: 8, series: 2, pausa: '2.5', rir: 3 },
-        { name: 'Laterales con mancuernas', rp: 12, rpe: 8, series: 3, pausa: '2.5', rir: 3 },
-        { name: 'Hiperextensión lumbar', rp: 10, rpe: 7, series: 3, pausa: '2.5', rir: 3 },
-        { name: 'Rackpull', rp: 10, rpe: 6, series: 3, pausa: '2.5', rir: 3 },
-        { name: 'Pallof press', rp: 15, rpe: 6, series: 4, pausa: '2.5', rir: 3 },
-      ]},
-      { label: 'Vuelta a la calma', exercises: [
-        { name: 'Ejercicio cardiovascular', rp: 20, rpe: 4, series: 1, pausa: '-', rir: '-' },
-      ]}
-    ]
-  },
-  {
-    id: 's2-empuje-traccion', name: 'Empuje/Tracción', sub: 'Empuje · Tracción',
-    sections: [
-      { label: 'Calentamiento', exercises: [
-        { name: 'Movilidad articular y funcional', rp: "5'", rpe: 'x', series: 1, pausa: 'x', rir: '-' },
-      ]},
-      { label: 'Trabajo inicial', exercises: [
-        { name: 'Press de banco pin', rp: 8, rpe: 8, series: '-', pausa: '-', rir: '-' },
-        { name: 'Dominadas predominancia excéntrica', rp: 10, rpe: 7, series: '-', pausa: '-', rir: '-' },
-        { name: 'Fondos negativos', rp: 12, rpe: 7, series: '-', pausa: '-', rir: '-' },
-        { name: 'Remo unilateral con mancuerna', rp: 10, rpe: 6, series: '-', pausa: '-', rir: '-' },
-      ]},
-      { label: 'Vuelta a la calma', exercises: [
-        { name: 'Ejercicio cardiovascular', rp: 20, rpe: 4, series: 1, pausa: '-', rir: '-' },
-      ]}
-    ]
-  }
+  { id:'s2-pecho-biceps', name:'Pecho / Bíceps', sub:'Pecho · Bíceps', sections:[
+    { label:'Calentamiento', exercises:[{ name:'Movilidad articular y funcional', rp:"5'", rpe:'x', series:1, pausa:'x', rir:'-' }]},
+    { label:'Trabajo inicial', exercises:[
+      { name:'Press en smith inclinado', rp:8, rpe:7, series:3, pausa:'2.5', rir:3 },
+      { name:'Press frontal máquina', rp:10, rpe:6, series:3, pausa:'2.5', rir:3 },
+      { name:'Aperturas altas de pecho', rp:10, rpe:6, series:3, pausa:'2.5', rir:3 },
+      { name:'Aperturas baja en polea', rp:10, rpe:6, series:3, pausa:'2.5', rir:3 },
+      { name:'Curl martillo', rp:12, rpe:6, series:3, pausa:'2.5', rir:3 },
+      { name:'Curl inclinado', rp:10, rpe:7, series:3, pausa:'2.5', rir:3 },
+      { name:'Curl banco scott máquina', rp:10, rpe:7, series:3, pausa:'2.5', rir:3 },
+    ]},
+    { label:'Vuelta a la calma', exercises:[{ name:'Ejercicio cardiovascular', rp:20, rpe:4, series:1, pausa:'-', rir:'-' }]}
+  ]},
+  { id:'s2-cuad-gluteo', name:'Cuád / Glúteo', sub:'Cuádriceps · Glúteo', sections:[
+    { label:'Calentamiento', exercises:[{ name:'Movilidad articular y funcional', rp:"5'", rpe:'x', series:1, pausa:'x', rir:'-' }]},
+    { label:'Trabajo inicial', exercises:[
+      { name:'Extensiones de cuádriceps', rp:10, rpe:7, series:2, pausa:'2.5', rir:3 },
+      { name:'Sentadilla en hacksquat', rp:10, rpe:7, series:3, pausa:'2.5', rir:3 },
+      { name:'Estocada estática', rp:10, rpe:7, series:3, pausa:'2.5', rir:3 },
+      { name:'Hip trust', rp:10, rpe:7, series:3, pausa:'2.5', rir:2 },
+      { name:'Hiperextensión lumbar', rp:8, rpe:7, series:4, pausa:'2.5', rir:3 },
+      { name:'Gemelos parado', rp:12, rpe:7, series:4, pausa:'2.5', rir:'-' },
+    ]},
+    { label:'Vuelta a la calma', exercises:[{ name:'Ejercicio cardiovascular', rp:20, rpe:4, series:1, pausa:'-', rir:'-' }]}
+  ]},
+  { id:'s2-espalda-triceps', name:'Espalda / Tríceps', sub:'Espalda · Tríceps', sections:[
+    { label:'Calentamiento', exercises:[{ name:'Movilidad articular y funcional', rp:"5'", rpe:'x', series:1, pausa:'x', rir:'-' }]},
+    { label:'Trabajo inicial', exercises:[
+      { name:'Jalón alto supino', rp:8, rpe:7, series:3, pausa:'2.5', rir:3 },
+      { name:'Jalón unilateral máquina', rp:8, rpe:7, series:2, pausa:'2.5', rir:3 },
+      { name:'Remo en T', rp:10, rpe:7, series:3, pausa:'2.5', rir:3 },
+      { name:'Remo libre con barra', rp:8, rpe:7, series:3, pausa:'2.5', rir:3 },
+      { name:'Extensión de tríceps drop set', rp:12, rpe:7, series:4, pausa:'2.5', rir:3 },
+      { name:'Extensión tras nuca', rp:10, rpe:7, series:4, pausa:'2.5', rir:3 },
+    ]},
+    { label:'Vuelta a la calma', exercises:[{ name:'Ejercicio cardiovascular', rp:20, rpe:4, series:1, pausa:'-', rir:'-' }]}
+  ]},
+  { id:'s2-isquios-gluteo', name:'Isquios / Glúteo', sub:'Isquiotibiales · Glúteo', sections:[
+    { label:'Calentamiento', exercises:[{ name:'Movilidad articular y funcional', rp:"5'", rpe:'x', series:1, pausa:'x', rir:'-' }]},
+    { label:'Trabajo inicial', exercises:[
+      { name:'Peso muerto rumano', rp:8, rpe:7, series:3, pausa:'2.5', rir:3 },
+      { name:'Curl femoral acostado', rp:12, rpe:7, series:3, pausa:'2.5', rir:3 },
+      { name:'Curl femoral sentado', rp:12, rpe:8, series:3, pausa:'2.5', rir:3 },
+      { name:'Hip trust', rp:10, rpe:8, series:3, pausa:'2.5', rir:2 },
+      { name:'Abductor', rp:15, rpe:7, series:3, pausa:'2.5', rir:3 },
+      { name:'Buenos días', rp:10, rpe:7, series:3, pausa:'2.5', rir:3 },
+    ]},
+    { label:'Vuelta a la calma', exercises:[{ name:'Ejercicio cardiovascular', rp:20, rpe:4, series:1, pausa:'-', rir:'-' }]}
+  ]},
+  { id:'s2-accesorios', name:'Accesorios', sub:'Hombros · Lumbar · Core', sections:[
+    { label:'Calentamiento', exercises:[{ name:'Movilidad articular y funcional', rp:"5'", rpe:'x', series:1, pausa:'x', rir:'-' }]},
+    { label:'Trabajo inicial', exercises:[
+      { name:'Press militar en máquina', rp:10, rpe:8, series:2, pausa:'2.5', rir:3 },
+      { name:'Laterales con mancuernas', rp:12, rpe:8, series:3, pausa:'2.5', rir:3 },
+      { name:'Hiperextensión lumbar', rp:10, rpe:7, series:3, pausa:'2.5', rir:3 },
+      { name:'Rackpull', rp:10, rpe:6, series:3, pausa:'2.5', rir:3 },
+      { name:'Pallof press', rp:15, rpe:6, series:4, pausa:'2.5', rir:3 },
+    ]},
+    { label:'Vuelta a la calma', exercises:[{ name:'Ejercicio cardiovascular', rp:20, rpe:4, series:1, pausa:'-', rir:'-' }]}
+  ]},
+  { id:'s2-empuje-traccion', name:'Empuje/Tracción', sub:'Empuje · Tracción', sections:[
+    { label:'Calentamiento', exercises:[{ name:'Movilidad articular y funcional', rp:"5'", rpe:'x', series:1, pausa:'x', rir:'-' }]},
+    { label:'Trabajo inicial', exercises:[
+      { name:'Press de banco pin', rp:8, rpe:8, series:3, pausa:'2.5', rir:'-' },
+      { name:'Dominadas predominancia excéntrica', rp:10, rpe:7, series:3, pausa:'2.5', rir:'-' },
+      { name:'Fondos negativos', rp:12, rpe:7, series:3, pausa:'2.5', rir:'-' },
+      { name:'Remo unilateral con mancuerna', rp:10, rpe:6, series:3, pausa:'2.5', rir:'-' },
+    ]},
+    { label:'Vuelta a la calma', exercises:[{ name:'Ejercicio cardiovascular', rp:20, rpe:4, series:1, pausa:'-', rir:'-' }]}
+  ]}
 ];
 
-// ─── STATE ───────────────────────────────────────────────────────────────────
-let activeSemana = 1;
-let activeDay = 0;
-let data = JSON.parse(localStorage.getItem('talo-tracker-v3') || '{}');
-let editingKey = null;
+let activeSemana=1, activeDay=0, localData={}, historial={}, editingKey=null, saving=false;
+function getCurrentDays(){ return activeSemana===1 ? DAYS_S1 : DAYS_S2; }
+function todayStr(){ return new Date().toISOString().split('T')[0]; }
+function formatFecha(s){ const [y,m,d]=s.split('-'); return `${d}/${m}/${y}`; }
 
-function getCurrentDays() {
-  return activeSemana === 1 ? DAYS_S1 : DAYS_S2;
+async function loadHistorial(dayId){
+  try {
+    const rows = await supaFetch(`/rest/v1/sesiones?dia_id=eq.${dayId}&order=fecha.desc,serie_idx.asc`);
+    historial={};
+    const today=todayStr();
+    rows.forEach(r=>{
+      if(!historial[r.ejercicio_key]) historial[r.ejercicio_key]=[];
+      historial[r.ejercicio_key].push(r);
+      if(r.fecha===today){
+        if(!localData[r.ejercicio_key]) localData[r.ejercicio_key]={series:{}};
+        if(!localData[r.ejercicio_key].series) localData[r.ejercicio_key].series={};
+        localData[r.ejercicio_key].series[r.serie_idx]={ reps:r.reps, carga:r.carga, rpe:r.rpe_real, rir:r.rir_real, done:r.done };
+        if(r.nota && r.serie_idx===0) localData[r.ejercicio_key].nota=r.nota;
+      }
+    });
+  } catch(e){ console.error('Load error:',e); }
 }
 
-function switchSemana(n) {
-  activeSemana = n;
-  activeDay = 0;
-  document.getElementById('btnS1').classList.toggle('active', n === 1);
-  document.getElementById('btnS2').classList.toggle('active', n === 2);
-  buildUI();
+async function saveSession(){
+  if(saving) return;
+  saving=true;
+  const btn=document.getElementById('saveBtn');
+  btn.disabled=true; btn.textContent='Guardando...';
+  const DAYS=getCurrentDays(), day=DAYS[activeDay], today=todayStr(), rows=[];
+  day.sections.forEach((s,si)=>{
+    s.exercises.forEach((ex,ei)=>{
+      const key=`${day.id}-${si}-${ei}`;
+      const ld=localData[key]||{}, series=ld.series||{}, nota=ld.nota||null;
+      const n=parseInt(ex.series);
+      if(!isNaN(n)){
+        for(let i=0;i<n;i++){
+          const sv=series[i]||{};
+          rows.push({ semana:activeSemana, dia_id:day.id, ejercicio_key:key, serie_idx:i,
+            reps:sv.reps?parseInt(sv.reps):null, carga:sv.carga?parseFloat(sv.carga):null,
+            rpe_real:sv.rpe?parseFloat(sv.rpe):null, rir_real:sv.rir?parseInt(sv.rir):null,
+            done:sv.done||false, nota:i===0?nota:null, fecha:today });
+        }
+      }
+    });
+  });
+  try {
+    await supaFetch('/rest/v1/sesiones','POST',rows);
+    showToast('✓ Guardado en la nube','ok');
+    await loadHistorial(day.id);
+    buildUI();
+  } catch(e){ showToast('Error al guardar','err'); console.error(e); }
+  saving=false; btn.disabled=false; btn.textContent='Guardar sesión';
 }
 
-function buildUI() {
-  const DAYS = getCurrentDays();
-  const tabsEl = document.getElementById('dayTabs');
-  const panelsEl = document.getElementById('dayPanels');
-  tabsEl.innerHTML = '';
-  panelsEl.innerHTML = '';
+function switchSemana(n){
+  activeSemana=n; activeDay=0; localData={}; historial={};
+  document.getElementById('btnS1').classList.toggle('active',n===1);
+  document.getElementById('btnS2').classList.toggle('active',n===2);
+  loadHistorial(getCurrentDays()[0].id).then(()=>buildUI());
+}
 
-  DAYS.forEach((day, di) => {
-    const tab = document.createElement('button');
-    tab.className = 'day-tab' + (di === activeDay ? ' active' : '');
-    tab.textContent = day.name;
-    tab.onclick = () => { activeDay = di; buildUI(); };
+function buildUI(){
+  const DAYS=getCurrentDays();
+  const tabsEl=document.getElementById('dayTabs'), panelsEl=document.getElementById('dayPanels');
+  tabsEl.innerHTML=''; panelsEl.innerHTML='';
+  DAYS.forEach((day,di)=>{
+    const tab=document.createElement('button');
+    tab.className='day-tab'+(di===activeDay?' active':'');
+    tab.textContent=day.name;
+    tab.onclick=()=>{ activeDay=di; localData={}; historial={}; loadHistorial(day.id).then(()=>buildUI()); };
     tabsEl.appendChild(tab);
-
-    const panel = document.createElement('div');
-    panel.className = 'day-panel' + (di === activeDay ? ' active' : '');
-
-    const totalSeries = day.sections.reduce((acc, s) => acc + s.exercises.reduce((a, e) => {
-      const n = parseInt(e.series); return a + (isNaN(n) ? 0 : n);
-    }, 0), 0);
-    const doneSeries = countDone(day.id, day.sections);
-    const pct = totalSeries > 0 ? Math.round((doneSeries / totalSeries) * 100) : 0;
-
-    let html = `<div class="day-title">${day.name}</div>
-                <div class="day-subtitle">${day.sub}</div>
-                <div class="progress-wrap"><div class="progress-bar" style="width:${pct}%"></div></div>`;
-
-    day.sections.forEach((section, si) => {
-      html += `<div class="section-label">${section.label}</div>`;
-      section.exercises.forEach((ex, ei) => {
-        const key = `${day.id}-${si}-${ei}`;
-        const saved = data[key] || {};
-        const isOpen = saved.open || false;
-        const customName = saved.customName || ex.name;
-        html += buildExCard(key, ex, customName, isOpen);
+    const panel=document.createElement('div');
+    panel.className='day-panel'+(di===activeDay?' active':'');
+    const total=day.sections.reduce((a,s)=>a+s.exercises.reduce((b,e)=>{const n=parseInt(e.series);return b+(isNaN(n)?0:n);},0),0);
+    const done=countDone(day.id,day.sections);
+    const pct=total>0?Math.round((done/total)*100):0;
+    let html=`<div class="day-title">${day.name}</div><div class="day-subtitle">${day.sub}</div><div class="day-fecha">${formatFecha(todayStr())}</div><div class="progress-wrap"><div class="progress-bar" style="width:${pct}%"></div></div>`;
+    day.sections.forEach((section,si)=>{
+      html+=`<div class="section-label">${section.label}</div>`;
+      section.exercises.forEach((ex,ei)=>{
+        const key=`${day.id}-${si}-${ei}`;
+        const saved=localData[key]||{};
+        html+=buildExCard(key,ex,saved.customName||ex.name,saved.open||false);
       });
     });
-
-    panel.innerHTML = html;
-    panelsEl.appendChild(panel);
+    panel.innerHTML=html; panelsEl.appendChild(panel);
   });
-
   attachEvents();
 }
 
-function buildExCard(key, ex, customName, isOpen) {
-  const saved = data[key] || {};
-  const seriesArr = saved.series || {};
-  const nota = saved.nota || '';
-  const openClass = isOpen ? ' open' : '';
-  const numSeries = parseInt(ex.series);
-  const hasRows = !isNaN(numSeries) && numSeries > 0;
-
-  let seriesRows = '';
-  if (hasRows) {
-    for (let i = 0; i < numSeries; i++) {
-      const s = seriesArr[i] || {};
-      const doneClass = s.done ? ' done' : '';
-      const doneIcon = s.done ? '✓' : '';
-      seriesRows += `
-        <div class="serie-row">
-          <div class="serie-num">${i+1}</div>
-          <input class="serie-input" type="number" placeholder="${ex.rp}" value="${s.reps || ''}" inputmode="numeric"
-            onchange="saveField('${key}','series',${i},'reps',this.value)">
-          <input class="serie-input" type="number" placeholder="kg" value="${s.carga || ''}" inputmode="decimal"
-            onchange="saveField('${key}','series',${i},'carga',this.value)">
-          <input class="serie-input" type="number" placeholder="${ex.rpe}" value="${s.rpe || ''}" inputmode="decimal" style="font-size:12px"
-            onchange="saveField('${key}','series',${i},'rpe',this.value)">
-          <input class="serie-input" type="number" placeholder="${ex.rir}" value="${s.rir || ''}" inputmode="numeric" style="font-size:12px"
-            onchange="saveField('${key}','series',${i},'rir',this.value)">
-          <div class="serie-status">
-            <button class="check-btn${doneClass}" data-key="${key}" data-idx="${i}">${doneIcon}</button>
-          </div>
-        </div>`;
+function buildExCard(key,ex,customName,isOpen){
+  const saved=localData[key]||{}, seriesData=saved.series||{}, nota=saved.nota||'';
+  const numSeries=parseInt(ex.series), hasRows=!isNaN(numSeries)&&numSeries>0;
+  const hist=historial[key]||[];
+  const byFecha={};
+  hist.forEach(r=>{ if(!byFecha[r.fecha]) byFecha[r.fecha]=[]; byFecha[r.fecha].push(r); });
+  const fechas=Object.keys(byFecha).sort().reverse().filter(f=>f!==todayStr()).slice(0,3);
+  let histHTML='';
+  if(fechas.length>0){
+    const chips=fechas.map(f=>{
+      const rows=byFecha[f].filter(r=>r.carga);
+      if(!rows.length) return '';
+      const maxC=Math.max(...rows.map(r=>parseFloat(r.carga)||0));
+      const maxR=rows.find(r=>parseFloat(r.carga)===maxC)?.reps||'-';
+      return `<div class="hist-chip">${formatFecha(f)} — <span>${maxC}kg × ${maxR}</span></div>`;
+    }).join('');
+    if(chips) histHTML=`<div class="hist-section"><div class="hist-label">Historial</div><div class="hist-row">${chips}</div></div>`;
+  }
+  let seriesRows='';
+  if(hasRows){
+    for(let i=0;i<numSeries;i++){
+      const s=seriesData[i]||{};
+      const prev=hist.find(r=>r.serie_idx===i&&r.fecha!==todayStr());
+      const repsPH=prev?.reps||ex.rp, cargaPH=prev?.carga?`${prev.carga}kg`:'kg';
+      seriesRows+=`<div class="serie-row">
+        <div class="serie-num">${i+1}</div>
+        <input class="serie-input" type="number" placeholder="${repsPH}" value="${s.reps||''}" inputmode="numeric" onchange="setField('${key}',${i},'reps',this.value)">
+        <input class="serie-input" type="number" placeholder="${cargaPH}" value="${s.carga||''}" inputmode="decimal" onchange="setField('${key}',${i},'carga',this.value)">
+        <input class="serie-input" type="number" placeholder="${ex.rpe}" value="${s.rpe||''}" inputmode="decimal" style="font-size:12px" onchange="setField('${key}',${i},'rpe',this.value)">
+        <input class="serie-input" type="number" placeholder="${ex.rir}" value="${s.rir||''}" inputmode="numeric" style="font-size:12px" onchange="setField('${key}',${i},'rir',this.value)">
+        <div class="serie-status"><button class="check-btn${s.done?' done':''}" data-key="${key}" data-idx="${i}">${s.done?'✓':''}</button></div>
+      </div>`;
     }
   }
-
-  const rirDisplay = ex.rir === '-' ? '-' : `RIR ${ex.rir}`;
-  const seriesDisplay = ex.series === '-' ? '-' : `${ex.series} ×`;
-
-  return `
-    <div class="exercise-card${openClass}" data-key="${key}">
-      <div class="exercise-header">
-        <div class="exercise-header-left">
-          <div class="exercise-name-wrap">
-            <div class="exercise-name">${customName}</div>
-            <button class="edit-name-btn" data-key="${key}" data-name="${customName}" onclick="openModal(event, '${key}', this.dataset.name)">✎ editar</button>
-          </div>
-          <div class="exercise-meta">
-            <span class="meta-pill">${seriesDisplay} ${ex.rp} reps</span>
-            <span class="meta-pill rpe">RPE ${ex.rpe}</span>
-            <span class="meta-pill">${rirDisplay}</span>
-            <span class="meta-pill">Pausa ${ex.pausa}′</span>
-          </div>
+  return `<div class="exercise-card${isOpen?' open':''}" data-key="${key}">
+    <div class="exercise-header">
+      <div class="exercise-header-left">
+        <div class="exercise-name-wrap">
+          <div class="exercise-name">${customName}</div>
+          <button class="edit-name-btn" data-key="${key}" data-name="${customName}" onclick="openModal(event,'${key}',this.dataset.name)">✎ editar</button>
         </div>
-        <div class="exercise-chevron">⌄</div>
-      </div>
-      <div class="series-container">
-        ${hasRows ? `
-        <div class="series-header">
-          <div>#</div><div>Reps</div><div>Carga</div><div>RPE real</div><div>RIR real</div><div>✓</div>
+        <div class="exercise-meta">
+          <span class="meta-pill">${hasRows?ex.series+' ×':''} ${ex.rp} reps</span>
+          <span class="meta-pill rpe">RPE ${ex.rpe}</span>
+          ${ex.rir!=='-'?`<span class="meta-pill">RIR ${ex.rir}</span>`:''}
+          <span class="meta-pill">Pausa ${ex.pausa}′</span>
         </div>
-        ${seriesRows}` : ''}
-        <div class="nota-label">Notas</div>
-        <textarea class="nota-input" placeholder="Sensaciones, ajustes, PR..."
-          onchange="saveNota('${key}', this.value)">${nota}</textarea>
       </div>
-    </div>`;
+      <div class="exercise-chevron">⌄</div>
+    </div>
+    <div class="series-container">
+      ${hasRows?`<div class="series-header"><div>#</div><div>Reps</div><div>Carga</div><div>RPE</div><div>RIR</div><div>✓</div></div>${seriesRows}`:''}
+      ${histHTML}
+      <div class="nota-label">Notas</div>
+      <textarea class="nota-input" placeholder="Sensaciones, ajustes, PR..." onchange="setNota('${key}',this.value)">${nota}</textarea>
+    </div>
+  </div>`;
 }
 
-function attachEvents() {
-  document.querySelectorAll('.exercise-header').forEach(h => {
-    h.onclick = function(e) {
-      if (e.target.classList.contains('edit-name-btn')) return;
-      const card = this.closest('.exercise-card');
-      const key = card.dataset.key;
+function attachEvents(){
+  document.querySelectorAll('.exercise-header').forEach(h=>{
+    h.onclick=function(e){
+      if(e.target.classList.contains('edit-name-btn')) return;
+      const card=this.closest('.exercise-card'), key=card.dataset.key;
       card.classList.toggle('open');
-      if (!data[key]) data[key] = {};
-      data[key].open = card.classList.contains('open');
+      if(!localData[key]) localData[key]={};
+      localData[key].open=card.classList.contains('open');
     };
   });
-
-  document.querySelectorAll('.check-btn').forEach(btn => {
-    btn.onclick = function() {
-      this.classList.toggle('done');
-      this.textContent = this.classList.contains('done') ? '✓' : '';
-      const key = this.dataset.key;
-      const idx = this.dataset.idx;
-      if (!data[key]) data[key] = {};
-      if (!data[key].series) data[key].series = {};
-      if (!data[key].series[idx]) data[key].series[idx] = {};
-      data[key].series[idx].done = this.classList.contains('done');
+  document.querySelectorAll('.check-btn').forEach(btn=>{
+    btn.onclick=function(){
+      this.classList.toggle('done'); this.textContent=this.classList.contains('done')?'✓':'';
+      const key=this.dataset.key, idx=this.dataset.idx;
+      if(!localData[key]) localData[key]={};
+      if(!localData[key].series) localData[key].series={};
+      if(!localData[key].series[idx]) localData[key].series[idx]={};
+      localData[key].series[idx].done=this.classList.contains('done');
       updateProgress();
     };
   });
 }
 
-function openModal(e, key, currentName) {
-  e.stopPropagation();
-  editingKey = key;
-  document.getElementById('modalInput').value = currentName;
-  document.getElementById('modalOverlay').classList.add('show');
-  setTimeout(() => document.getElementById('modalInput').focus(), 100);
-}
+function setField(key,idx,field,value){ if(!localData[key]) localData[key]={}; if(!localData[key].series) localData[key].series={}; if(!localData[key].series[idx]) localData[key].series[idx]={}; localData[key].series[idx][field]=value; }
+function setNota(key,value){ if(!localData[key]) localData[key]={}; localData[key].nota=value; }
+function countDone(dayId,sections){ let c=0; sections.forEach((s,si)=>s.exercises.forEach((ex,ei)=>{ const key=`${dayId}-${si}-${ei}`, series=(localData[key]||{}).series||{}, n=parseInt(ex.series); if(!isNaN(n)) for(let i=0;i<n;i++) if(series[i]?.done) c++; })); return c; }
+function updateProgress(){ const DAYS=getCurrentDays(),day=DAYS[activeDay]; const total=day.sections.reduce((a,s)=>a+s.exercises.reduce((b,e)=>{const n=parseInt(e.series);return b+(isNaN(n)?0:n);},0),0); const done=countDone(day.id,day.sections); const bar=document.querySelector('.progress-bar'); if(bar) bar.style.width=(total>0?Math.round((done/total)*100):0)+'%'; }
+function openModal(e,key,name){ e.stopPropagation(); editingKey=key; document.getElementById('modalInput').value=name; document.getElementById('modalOverlay').classList.add('show'); setTimeout(()=>document.getElementById('modalInput').focus(),100); }
+function closeModal(){ document.getElementById('modalOverlay').classList.remove('show'); editingKey=null; }
+function confirmEdit(){ const n=document.getElementById('modalInput').value.trim(); if(!n||!editingKey){closeModal();return;} if(!localData[editingKey]) localData[editingKey]={}; localData[editingKey].customName=n; closeModal(); buildUI(); }
+document.getElementById('modalOverlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
+document.getElementById('modalInput').addEventListener('keydown',function(e){if(e.key==='Enter')confirmEdit();if(e.key==='Escape')closeModal();});
+function resetDay(){ if(!confirm('¿Borrar datos del día en pantalla?')) return; const DAYS=getCurrentDays(),day=DAYS[activeDay]; day.sections.forEach((s,si)=>s.exercises.forEach((ex,ei)=>{ const key=`${day.id}-${si}-${ei}`; if(localData[key]){localData[key].series={};localData[key].nota='';} })); buildUI(); }
+function showToast(msg,type='ok'){ const t=document.getElementById('toast'); t.textContent=msg; t.className=`toast ${type} show`; setTimeout(()=>t.classList.remove('show'),2500); }
 
-function closeModal() {
-  document.getElementById('modalOverlay').classList.remove('show');
-  editingKey = null;
-}
-
-function confirmEdit() {
-  const newName = document.getElementById('modalInput').value.trim();
-  if (!newName || !editingKey) { closeModal(); return; }
-  if (!data[editingKey]) data[editingKey] = {};
-  data[editingKey].customName = newName;
-  closeModal();
-  saveData(true);
-  buildUI();
-}
-
-document.getElementById('modalOverlay').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
-});
-
-document.getElementById('modalInput').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') confirmEdit();
-  if (e.key === 'Escape') closeModal();
-});
-
-function saveField(key, section, idx, field, value) {
-  if (!data[key]) data[key] = {};
-  if (!data[key][section]) data[key][section] = {};
-  if (!data[key][section][idx]) data[key][section][idx] = {};
-  data[key][section][idx][field] = value;
-}
-
-function saveNota(key, value) {
-  if (!data[key]) data[key] = {};
-  data[key].nota = value;
-}
-
-function countDone(dayId, sections) {
-  let count = 0;
-  sections.forEach((s, si) => {
-    s.exercises.forEach((ex, ei) => {
-      const key = `${dayId}-${si}-${ei}`;
-      const saved = data[key] || {};
-      const series = saved.series || {};
-      const n = parseInt(ex.series);
-      if (!isNaN(n)) {
-        for (let i = 0; i < n; i++) {
-          if (series[i] && series[i].done) count++;
-        }
-      }
-    });
-  });
-  return count;
-}
-
-function updateProgress() {
-  const DAYS = getCurrentDays();
-  const day = DAYS[activeDay];
-  const totalSeries = day.sections.reduce((acc, s) => acc + s.exercises.reduce((a, e) => {
-    const n = parseInt(e.series); return a + (isNaN(n) ? 0 : n);
-  }, 0), 0);
-  const doneSeries = countDone(day.id, day.sections);
-  const pct = totalSeries > 0 ? Math.round((doneSeries / totalSeries) * 100) : 0;
-  const bar = document.querySelector('.progress-bar');
-  if (bar) bar.style.width = pct + '%';
-}
-
-function saveData(silent) {
-  localStorage.setItem('talo-tracker-v3', JSON.stringify(data));
-  if (!silent) {
-    const toast = document.getElementById('toast');
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 2000);
-  }
-}
-
-function resetDay() {
-  if (!confirm('¿Borrar datos del día actual?')) return;
-  const DAYS = getCurrentDays();
-  const day = DAYS[activeDay];
-  day.sections.forEach((s, si) => {
-    s.exercises.forEach((ex, ei) => {
-      const key = `${day.id}-${si}-${ei}`;
-      if (data[key]) { data[key].series = {}; data[key].nota = ''; }
-    });
-  });
-  saveData(true);
-  buildUI();
-}
-
-buildUI();
+loadHistorial(getCurrentDays()[0].id).then(()=>buildUI());
 </script>
 </body>
 </html>
